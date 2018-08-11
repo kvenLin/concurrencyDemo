@@ -63,3 +63,54 @@ https://blog.csdn.net/Box_clf/article/details/81560384
 	ArrayList---> CopyOnWriteArrayList
 	HashSet---> CopyOnWriteArraySet,TreeSet---> ConcurrentSkipListSet
 	HashMap---> Concurr	entHashMap,TreeMap---> ConcurrentSkipListMap
+	
+### 6.5J.U.C(Java.util.concurrency)
+
+- CountDownLatch
+
+        使用场景: 程序需要等待执行某个条件后才能执行后续的操作
+        并行的计算,当某个计算量比较大时可以拆分成多个子任务,等待所有子任务完成之后,父任务再拿到所有子任务的运算结果进行汇总
+    
+- Semaphore
+
+        使用场景:常用于仅能提供有限访问的资源,比如数据库的连接数只有20,而上层应用可能会远大于20,如果同时对数据库进行操作就可能会无法获取数据库连接数导致异常,这时就可以通过Semaphore来做并发访问控制
+    
+- CyclicBarrier
+
+多个线程之间进行相互等待
+
+使用场景和CountDownLatch类似
+
+    1.创建对象指明等待的线程数
+    2.当前线程完成对应的逻辑操作后调用CyclicBarrier的await()方法进行等待其他线程
+    3.当等待其他线程的线程总数达到了指定的数量进行后续的逻辑操作
+
+- ReentrantLock
+
+ReentrantLock(可重入锁)和synchronized区别:
+
+	1.可重入性
+	2.锁的实现:synchronized是JVM实现的,ReentrantLock是JDK实现的
+	3.性能区别:当synchronized引入轻量级所和自学锁后两者性能就差不多
+	官方建议使用synchronized,因为使用更简单
+	4.功能区别:
+		便利性:synchronized使用方便简洁,并且是由编译器保证加锁和释放,而ReentrantLock是手动声明加锁和释放锁
+		细粒度和灵活度:ReentrantLock优于synchronized
+ReentrantLock独有的功能:
+
+	1.可指定是公平锁还是非公平锁,而synchronized只能是非公平锁(所谓的公平锁就是先等待的线程先获得锁)
+	2.提供了一个Condition类,可以分组唤醒需要唤醒的线程
+	3.提供能够中断等待锁的线程的机制,lock.lockInterruptibly()
+- StampedLock
+
+控制锁有三种模式:写,读,乐观读
+
+一个StampedLock是由版本和模式两个部分组成.
+
+*乐观读*:当读的操作很多,写的操作很少的情况下,写入和读取同时发生的几率很小,
+因此不悲观的使用完整的读取锁定,程序可以查看读取资料之后是否得到写入之后的变更再采取后续的措施,大幅度提高程序的吞吐量.
+
+总结:
+
+	1.只有少量的线程的时候,使用synchronized是很好的通用的锁实现
+	2.线程不少,但是增长的趋势是可以预估的,这时ReentrantLock是一个很好的锁实现
