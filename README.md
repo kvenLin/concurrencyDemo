@@ -114,3 +114,47 @@ ReentrantLock独有的功能:
 
 	1.只有少量的线程的时候,使用synchronized是很好的通用的锁实现
 	2.线程不少,但是增长的趋势是可以预估的,这时ReentrantLock是一个很好的锁实现
+	
+### 6.6线程池
+
+ThreadPoolExecutor
+
+- 参数:
+
+	    1.corePoolSize:核心线程数
+	    2.maximumPoolSize:线程最大数
+	    3.workQueue:阻塞队列,储存等待执行的任务,很重要,会对线程池运行过程产生重大的影响
+	    4.keepAliveTime:线程任务执行时最多保持多久时间终止
+        5.unit: keepAliveTime的时间单位
+        6.threadFactory:线程工厂,用来创建线程,会有一个默认的工厂来创建线程
+        7.rejectHandler:当拒绝处理任务时的策略
+- 三个参数的关系:
+
+        1.线程池中的线程数<corePoolSize:
+            直接创建新线程来执行任务,即使线程池中的其他线程是空闲的
+        2.corePoolSize<线程池中的线程数< maximumPoolSize:
+            只有等workQueue满的时候才会去创建新的线程去执行新的任务
+        3. corePoolSize== maximumPoolSize:
+            如果有新任务提交,且workQueue还没满的时候,就就把任务放到workQueue中等待有新的线程后执行任务;如果此时workQueue也满了则会通过拒绝策略的参数来指定策略来处理这个任务.
+
+- 方法:
+
+        execute():提交任务,交给线程池执行
+        submit():提交任务,能够返回执行结果execute+Future
+        shutdown():关闭线程池,等待任务都执行完
+        shutdownNow():关闭线程池,不等待任务执行完
+        getTaskCount():线程池已执行和未执行的任务总数
+        getCompletedTaskCount():已完成的任务总数
+        getPoolSize():线程池当前的线程数量
+        getActiveCount():当前线程池中正在执行任务的线程数量
+        
+ Executor框架接口
+
+    Executors.newCachedThreadPool():
+        现一个可缓存的线程池,如果线程池超过了处理的需要可以灵活回收空闲的线程,如果没有回收的就新建线程
+    Executors.newFixedThreadPool():
+        创建的是一个定长的线程池,可以控制并发的线程数,超出的线程会在队列中等待
+    Executors.newScheduledThreadPool():
+        创建的也是一个定长的线程池,支持定时以及周期性的任务执行,
+    Executors.newSingleThreadExecutor():
+        创建的是一个单线程化的线程池,只会使用唯一的一个线程来执行任务,保证所有任务按照指定的顺序去执行,指定顺序可以是先入先出,优先级等等
