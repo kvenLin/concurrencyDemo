@@ -17,7 +17,7 @@ public class Escape {
     }
     private class InnerClass{
         public InnerClass(){
-            log.info("{}",Escape.this.thisCanBeEscape);
+            log.info("{}",Escape.this.thisCanBeEscape);//在没有完成构造函数之前就进行了引用,存在不安全的因素
         }
     }
 

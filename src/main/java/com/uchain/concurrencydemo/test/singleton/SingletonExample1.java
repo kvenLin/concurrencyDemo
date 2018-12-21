@@ -18,7 +18,8 @@ public class SingletonExample1 {
 
     //静态的工厂方法
     public static SingletonExample1 getInstance(){
-        if (instance==null){
+        if (instance == null){//多线程都可能走到这里,这时存在线程不安全
+            //若多个线程走到这里会创建多个对象,即多次调用构造方法
             instance = new SingletonExample1();
         }
         return instance;

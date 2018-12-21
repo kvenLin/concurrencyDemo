@@ -4,6 +4,7 @@ import com.uchain.concurrencydemo.annonation.NotThreadSafe;
 import com.uchain.concurrencydemo.annonation.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -48,5 +49,8 @@ public class ConcurrencyTest2 {
         int re = count.incrementAndGet();//现增加后获取值,得到的结果是准确的
 //        int re = stringBuffer.getAndIncrement();//先获取值再进行增加,获取的值会不准确
         log.info("re:{}",re);
+        ArrayList arrayList = new ArrayList();
+        arrayList.add(re);
+
     }
 }
